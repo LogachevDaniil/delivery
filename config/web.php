@@ -55,6 +55,9 @@ $config = [
             'class' => 'app\modules\account\Module',
             'defaultRoute' => 'account',
         ],
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+        ],
     ],
     'params' => $params,
 ];

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "statuse".
@@ -52,5 +53,20 @@ class Statuse extends \yii\db\ActiveRecord
     public function getOrders()
     {
         return $this->hasMany(Order::class, ['status_id' => 'id']);
+    }
+    public static function getStatus()
+    {
+        // альтернатива
+        // $query = 'SELECT  `statuse` . `id`, `statuse` . `title` FROM `statuse`';
+        // Yii::$app->db->createCommand($query)->queryAll();
+
+
+        return (new Query)
+            // ->select(['`statuse` . `id`', '`statuse` . `title`'])
+            ->select('statuse.title')
+            ->from('statuse')
+            ->indexBy('id')
+            // ->all();
+            ->column();
     }
 }
