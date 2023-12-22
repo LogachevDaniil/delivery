@@ -42,14 +42,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Регистрация', 'url' => ['/site/register']],
-            ['label' => 'Личный кабинет', 'url' => ['/account']],
+            // ['label' => 'мои заявки', 'url' => ['/account']],
+            !Yii::$app->user->isGuest && !Yii::$app->user->identity->isAdmin 
+            ?['label' => 'мои заявки', 'url' => ['/account']]:'',
+            !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin 
+            ?['label' => 'админка', 'url' => ['/admin']]:'',
+            Yii::$app->user->isGuest ? 
+            ['label' => 'Регистрация', 'url' => ['/site/register']]
+            :'',
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->login . ')',
+                        'Выйти (' . Yii::$app->user->identity->login . ')',
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()

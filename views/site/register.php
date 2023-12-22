@@ -9,24 +9,20 @@ use yii\bootstrap5\ActiveForm;
 ?>
 <div class="site-register">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+    'id' => 'registration-form',
+]); ?>
 
-        <?= $form->field($model, 'name') ?>
-        <?= $form->field($model, 'surname') ?>
-        <?= $form->field($model, 'patronimic') ?>
-        <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'full_name') ?>
+        <?= $form->field($model, 'login', ['enableAjaxValidation' => true]) ?>
+        <?= $form->field($model, 'password') ?>
+        <?= $form->field($model, 'password_repeat') ?>
+        <?= $form->field($model, 'email', ['enableAjaxValidation' => true]) ?>
         <?= $form->field($model, 'phone') ?>
-        <?= $form->field($model, 'login') ?>
-        <?= $form->field($model, 'password')->passwordInput() ?>
-        <?= $form->field($model, 'password_repeat')->passwordInput() ?>
-        <?= $form->field($model, 'rules')->checkbox() ?>
-        
-        <?# $form->field($model, 'created_at') ?>
-        <?# $form->field($model, 'photo') ?>
-        <?# $form->field($model, 'auth_key') ?>
+        <?= $form->field($model, 'agree')->checkbox() ?>
     
         <div class="form-group">
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
         </div>
     <?php ActiveForm::end(); ?>
 

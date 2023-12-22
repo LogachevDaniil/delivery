@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\RegisterForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -10,7 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use yii\helpers\VarDumper;
+use app\models\RegisrterForm;
+use yii\bootstrap5\ActiveForm;
 
 class SiteController extends Controller
 {
@@ -105,18 +105,6 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Displays about page.
@@ -127,19 +115,30 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
     public function actionRegister()
     {
-        $model = new RegisterForm();
+        $model = new RegisrterForm();
+
         if (Yii::$app->request->isPost) {
-            // $model->load - заполняем модель пользовательскими данными
+            # code...
+            if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
             if ($model->load(Yii::$app->request->post())) {
-                if ($user = $model->register()) {
-                    if (Yii::$app->user->login($user)) {
-                        return $this->redirect('/');
+                if ($model->validate()) {
+                    if ($user = $model->register()) {
+                        if (Yii::$app->user->login($user)) {
+                            return $this->redirect('./');
+                        }
                     }
                 }
             }
         }
-        return $this->render("register", compact('model'));
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
     }
 }

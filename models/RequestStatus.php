@@ -3,24 +3,23 @@
 namespace app\models;
 
 use Yii;
-use yii\db\Query;
 
 /**
- * This is the model class for table "category".
+ * This is the model class for table "request_status".
  *
  * @property int $id
  * @property string $title
  *
  * @property Request[] $requests
  */
-class Category extends \yii\db\ActiveRecord
+class RequestStatus extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'category';
+        return 'request_status';
     }
 
     /**
@@ -52,17 +51,9 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getRequests()
     {
-        return $this->hasMany(Request::class, ['category_id' => 'id']);
+        return $this->hasMany(Request::class, ['status_id' => 'id']);
     }
-    public static function getAllCategory()
-    {
-        return (new Query)
-            ->select('title')
-            ->from('category')
-            ->indexBy('id')
-            ->column();
-    }
-    public static function getCategoryTitle($id)
+    public static function getStatusTitle($id)
     {
         return self::findOne(['id' => $id])->title;
     }

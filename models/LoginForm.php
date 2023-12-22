@@ -13,7 +13,7 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-    public $login;
+    public $username;
     public $password;
     public $rememberMe = true;
 
@@ -26,8 +26,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // login and password are both required
-            [['login', 'password'], 'required'],
+            // username and password are both required
+            [['username', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -35,6 +35,21 @@ class LoginForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'full_name' => 'ФИО',
+            'login' => 'логин',
+            'username' => 'логин',
+            'password' => 'пароль',
+            'email' => 'Email',
+            'phone' => 'телефон',
+            'role_id' => 'Role ID',
+            'auth_key' => 'Auth Key',
+            'rememberMe' => 'запомнить меня',
+        ];
+    }
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
@@ -48,13 +63,13 @@ class LoginForm extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect login or password.');
+                $this->addError($attribute, 'Incorrect username or password.');
             }
         }
     }
 
     /**
-     * Logs in a user using the provided login and password.
+     * Logs in a user using the provided username and password.
      * @return bool whether the user is logged in successfully
      */
     public function login()
@@ -66,16 +81,17 @@ class LoginForm extends Model
     }
 
     /**
-     * Finds user by [[login]]
+     * Finds user by [[username]]
      *
      * @return User|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findBylogin($this->login);
+            $this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;
     }
+   
 }
